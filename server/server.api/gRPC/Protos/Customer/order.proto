@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+option csharp_namespace = "server.api.gRPC.Customer";
+
+package Customer;
+
+import "google/api/annotations.proto";
+import "gRPC/Protos/shared.proto";
+
+service Order {
+	rpc GetOrders (GetOrdersRequest) returns (GetOrdersReply){
+		option (google.api.http) = {
+			post : "/api/orders",
+			body:"*",
+		};
+	}
+
+	rpc PlaceOrder (PlaceOrderRequest) returns (PlaceOrderReply){
+		option (google.api.http) = {
+			post: "/api/order",
+			body : "*"
+		};
+	}
+
+	rpc CancelOrder (CancelOrderRequest) returns (CancelOrderReply){
+		option (google.api.http) = {
+			delete: "/api/order"
+		};
+	}
+
+	rpc UpdateOrder (UpdateOrderRequest) returns (UpdateOrderReply){
+		option (google.api.http) = {
+			post: "/api/order/update",
+			body: "*"
+		};
+	}
+}
+message UpdateOrderRequest{
+	int32 driverId = 1;
+	int32 truckId = 2;
+	int32 driverAssistantId = 3;
+	repeated int32 orders = 4;
+	int32 routeId = 5;
+	int32 storeId = 6;
+}
+message UpdateOrderReply{
+	int32 deliveryId = 2;
+	StatusReply statusReply = 1;
+}
+
+
+message StatusReply {
+	string message = 1;
+	bool isSuccess = 2;
+	string userName = 3;
+	repeated string errors = 4;
+}
+message GetOrdersRequest {
+	optional string userName = 1;
+	optional int32 storeId = 2;
+	optional int32 routeId = 3;
+	optional string status = 5;
+	optional shared.Pagination p = 4;
+}
+
+
+message GetOrdersReply {
+	repeated OrderMessage orders = 1;
+	int64 count = 2;
+}
+
+message OrderMessage{
+	
+	uint64 routeId = 1;
+	string deliveryDate = 2;
+	string orderDate = 3;
+	string deliveryAddressId = 4;
+	uint64 orderCapacity = 5;
+	uint64 price = 6;
+	uint64 storeId = 7;
+	int32 Id = 8;
+	string status = 9;
+}
+
+message PlaceOrderReply {
+	
+	uint64 orderId = 1;
+}
+
+message CancelOrderRequest {
+	uint64 orderId = 1;
+}
+
+message CancelOrderReply {
+	uint64 orderId = 1;
+	PlaceOrderRequest orderDetails = 2;
+}
+message PlaceOrderRequest {
+	repeated OrderItem orderItems = 1;
+	uint64 routeId = 2;
+	string deliveryDate = 3;
+	string orderDate = 4;
+	string deliveryAddressId = 5;
+	uint64 orderCapacity = 6;
+	float  price = 7;
+	uint64 storeId = 8;
+	string userName = 9;
+}
+message OrderItem {
+	uint64 itemId = 1;
+	int32 quantity = 2;
+	int32 unitPrice = 3;
+}

@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option csharp_namespace = "server.api.gRPC.Customer";
+
+package Customer;
+
+import "google/api/annotations.proto";
+import "gRPC/Protos/shared.proto";
+
+service Route {
+	rpc GetDeliveryRoutes (GetRoutesRequest) returns (GetRoutesReply) {
+		option (google.api.http) = {
+			post: "/api/routes",
+			body : "*"
+		};
+	}
+		rpc GetDrivers (GetDriversRequest) returns (GetDriversReply){
+		option (google.api.http) = {
+			post: "/api/drivers",
+            body : "*"
+		};
+		}
+
+}
+
+message GetRoutesRequest {
+	uint64 storeId = 1;
+	optional shared.Pagination p = 2;
+}
+
+message GetRoutesReply {
+	repeated RouteMessage routes = 1;
+	int64 count = 2;
+
+}
+
+message RouteMessage {
+	int32 Id = 1;
+	int32 MaximumTimeForCompletion = 2;
+	int32 StoreId = 3;
+}
+
+message GetDriversRequest {
+	optional uint64 storeId = 2;
+	int32 type = 1;
+	optional shared.Pagination p = 3;
+}
+
+message GetDriversReply {
+	repeated shared.ListedDriverMessage drivers = 1;
+	int64 count = 2;
+
+}
