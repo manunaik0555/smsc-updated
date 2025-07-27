@@ -61,7 +61,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-For questions or support, please contact our team at support@companyA.com.
+For questions or support, please contact our team at manunaik0555@gmail.com
 
 ---
 
